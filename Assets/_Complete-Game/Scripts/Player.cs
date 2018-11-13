@@ -12,6 +12,9 @@ namespace Completed
 		public int pointsPerFood = 10;				//Number of points to add to player food points when picking up a food object.
 		public int pointsPerSoda = 20;				//Number of points to add to player food points when picking up a soda object.
 		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
+		public int rockUses = 2;
+		public int paperUses = 2;
+		public int scissorsUses = 2;
 		public Text foodText;						//UI Text to display current player food total.
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
 		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
@@ -23,6 +26,9 @@ namespace Completed
 		
 		private Animator animator;					//Used to store a reference to the Player's animator component.
 		private int food;                           //Used to store player food points total during level.
+		private int rock;
+		private int paper;
+		private int scissors;
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
 #endif
@@ -36,6 +42,9 @@ namespace Completed
 			
 			//Get the current food point total stored in GameManager.instance between levels.
 			food = GameManager.instance.playerFoodPoints;
+			rock = GameManager.instance.playerRockUses;
+			paper = GameManager.instance.playerPaperUses;
+			scissors = GameManager.instance.playerScissorsUses;
 			
 			//Set the foodText to reflect the current player food total.
 			foodText.text = "Food: " + food;
@@ -50,6 +59,9 @@ namespace Completed
 		{
 			//When Player object is disabled, store the current local food total in the GameManager so it can be re-loaded in next level.
 			GameManager.instance.playerFoodPoints = food;
+			GameManager.instance.playerRockUses = rock;
+			GameManager.instance.playerPaperUses = paper;
+			GameManager.instance.playerScissorsUses = scissors;
 		}
 		
 		
@@ -132,6 +144,7 @@ namespace Completed
 		{
 			//Every time player moves, subtract from food points total.
 			food--;
+			print ("Rock: " + rock + ", Paper: " + paper + ", Scissors: " + scissors + ", Food: " + food);
 			
 			//Update food text display to reflect current score.
 			foodText.text = "Food: " + food;
@@ -218,16 +231,27 @@ namespace Completed
 			}
 
 			//Check if the tag of the trigger collided with is a weapon.
-			else if(other.tag == "Weapon")
+			else if(other.tag == "Rock")
 			{
-//				//Add pointsPerSoda to players food points total
-//				food += pointsPerSoda;
-//
-//				//Update foodText to represent current total and notify player that they gained points
-//				foodText.text = "+" + pointsPerSoda + " Food: " + food;
-//
-//				//Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
-//				SoundManager.instance.RandomizeSfx (drinkSound1, drinkSound2);
+				rock = rockUses;
+
+				//Disable the soda object the player collided with.
+				other.gameObject.SetActive (false);
+			}
+
+			//Check if the tag of the trigger collided with is a weapon.
+			else if(other.tag == "Paper")
+			{
+				paper = paperUses;
+
+				//Disable the soda object the player collided with.
+				other.gameObject.SetActive (false);
+			}
+
+			//Check if the tag of the trigger collided with is a weapon.
+			else if(other.tag == "Scissors")
+			{
+				scissors = scissorsUses;
 
 				//Disable the soda object the player collided with.
 				other.gameObject.SetActive (false);
