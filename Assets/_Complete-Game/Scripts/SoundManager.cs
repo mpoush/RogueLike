@@ -11,7 +11,7 @@ namespace Completed
 		public float lowPitchRange = .95f;				//The lowest a sound effect will be randomly pitched.
 		public float highPitchRange = 1.05f;			//The highest a sound effect will be randomly pitched.
 		
-		
+		// Music is called Overworld
 		void Awake ()
 		{
 			//Check if there is already an instance of SoundManager
